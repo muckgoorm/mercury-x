@@ -21,8 +21,8 @@ func JobList() {
 		SetTitle("JD")
 
 	flex := tview.NewFlex().
-		AddItem(jobs, 0, 3, true).
-		AddItem(jobDescriptions, 0, 7, false)
+		AddItem(jobs, 0, 1, true).
+		AddItem(jobDescriptions, 0, 2, false)
 
 	app.SetInputCapture(t.inputActions)
 	app.SetRoot(flex, true).Run()

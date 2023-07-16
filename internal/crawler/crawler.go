@@ -1,9 +1,9 @@
 package crawler
 
-type Crawler interface {
-	CheckValidation() bool
-	SearchJobPostings(JobSearchPayload) []JobPosting
-	ParseJobDescription(url string) JobDescription
+type crawler interface {
+	checkValidation() bool
+	searchJobPostings(JobSearchPayload) []JobPosting
+	parseJobDescription(url string) JobDescription
 }
 
 type JobSearchPayload struct {
