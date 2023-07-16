@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 	"mercury-x/cmd"
-	"mercury-x/pkg"
+	"mercury-x/internal"
 	"os"
 
 	"github.com/urfave/cli/v2"
@@ -28,7 +28,7 @@ func build() *cli.App {
 		if err != nil {
 			return err
 		}
-		return cli.Exit("", pkg.ExitCodeInvalidUsage)
+		return cli.Exit("", internal.ExitCodeInvalidUsage)
 	}
 
 	app.Commands = cmd.GetCommands()
@@ -49,6 +49,6 @@ func main() {
 		if v, ok := err.(cli.ExitCoder); ok {
 			os.Exit(v.ExitCode())
 		}
-		os.Exit(pkg.ExitCodeInvalidUsage)
+		os.Exit(internal.ExitCodeInvalidUsage)
 	}
 }
