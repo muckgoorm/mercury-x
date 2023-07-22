@@ -1,13 +1,12 @@
-package crawler
+package internal
 
-type crawler interface {
-	checkValidation() bool
-	searchJobPostings(JobSearchPayload) []JobPosting
-	parseJobDescription(url string) JobDescription
+type Crawler interface {
+	CheckValidation() bool
+	SearchJobPostings(JobSearchPayload) ([]JobPosting, error)
+	ParseJobDescription(url string) JobDescription
 }
 
 type JobSearchPayload struct {
-	Platform   string
 	Role       string
 	Experience string
 	Stacks     []string

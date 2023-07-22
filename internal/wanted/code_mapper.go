@@ -1,4 +1,4 @@
-package crawler
+package wanted
 
 import "strings"
 
@@ -66,7 +66,7 @@ const (
 	rust     = "1557"
 )
 
-func MapRole(role string) string {
+func mapRole(role string) string {
 	switch role {
 	case "백엔드":
 		return be
@@ -107,7 +107,7 @@ func MapRole(role string) string {
 	}
 }
 
-func MapExperience(exp string) string {
+func mapExperience(exp string) string {
 	switch exp {
 	case "신입":
 		return "0"
@@ -136,7 +136,7 @@ func MapExperience(exp string) string {
 	}
 }
 
-func MapStacks(stacks []string) string {
+func mapStacks(stacks []string) string {
 	var qb strings.Builder
 	for _, stack := range stacks {
 		switch stack {

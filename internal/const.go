@@ -1,9 +1,6 @@
 package internal
 
-const (
-	ExitCodeNoData       = 1
-	ExitCodeInvalidUsage = 2
-)
+// TODO: 상수 관리를 어떻게 할 것인지에 대한 고민 필요
 
 var (
 	Platforms = []string{

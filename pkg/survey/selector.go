@@ -1,11 +1,11 @@
-package pkg
+package survey
 
 import (
 	"github.com/AlecAivazis/survey/v2"
 )
 
 func SingleChoice(label string, opt []string) string {
-	res := ""
+	var res string
 	prompt := &survey.Select{
 		Message:  label,
 		Options:  opt,
@@ -18,7 +18,7 @@ func SingleChoice(label string, opt []string) string {
 }
 
 func MultipleChoice(label string, opt []string) []string {
-	res := []string{}
+	var res []string
 	prompt := &survey.MultiSelect{
 		Message:  label,
 		Options:  opt,
