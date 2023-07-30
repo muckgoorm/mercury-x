@@ -6,21 +6,9 @@ import (
 	"mercury-x/internal/wanted"
 	"mercury-x/pkg/survey"
 	"mercury-x/pkg/tui"
-
-	"github.com/urfave/cli/v2"
 )
 
-func searchCommand() *cli.Command {
-	return &cli.Command{
-		Name:        "search",
-		Usage:       "채용 공고 검색",
-		Description: "원하는 조건에 맞는 채용 공고들을 조회합니다.",
-		Aliases:     []string{"s"},
-		Action:      searchFunction,
-	}
-}
-
-func searchFunction(c *cli.Context) error {
+func search() {
 	platform := survey.SingleChoice("검색할 플랫폼을 골라주세요", internal.Platforms)
 	role := survey.SingleChoice("직군을 골라주세요", internal.Roles)
 	experience := survey.SingleChoice("경력을 골라주세요", internal.Experiences)
@@ -49,6 +37,4 @@ func searchFunction(c *cli.Context) error {
 		items = append(items, fmt.Sprintf("%s / %s", p.Company, p.Role))
 	}
 	tui.GenerateFlexTable(firstTitle, secondTitle, items)
-
-	return nil
 }

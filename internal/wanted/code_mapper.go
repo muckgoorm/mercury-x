@@ -23,7 +23,7 @@ const (
 	blockchain = "/1027"
 	hw         = "/672"
 
-	// Stacls
+	// Stacks
 	java     = "1540"
 	kotlin   = "1544"
 	js       = "1541"
@@ -64,6 +64,11 @@ const (
 	csharp   = "1533"
 	dotnet   = "1445"
 	rust     = "1557"
+
+	// HTML classes
+	card     = "Card_className__u5rsb"
+	company  = "job-card-company-name"
+	position = "job-card-position"
 )
 
 func mapRole(role string) string {

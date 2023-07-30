@@ -1,7 +1,11 @@
 package survey
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/AlecAivazis/survey/v2"
+	"github.com/AlecAivazis/survey/v2/terminal"
 )
 
 func SingleChoice(label string, opt []string) string {
@@ -12,7 +16,14 @@ func SingleChoice(label string, opt []string) string {
 		PageSize: 6,
 		Help:     "위아래 방향키로 커서를 옮기고, 엔터로 선택합니다.",
 	}
-	survey.AskOne(prompt, &res)
+	err := survey.AskOne(prompt, &res)
+	if err != nil {
+		if err == terminal.InterruptErr {
+			os.Exit(128)
+		}
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
 
 	return res
 }
@@ -25,7 +36,14 @@ func MultipleChoice(label string, opt []string) []string {
 		PageSize: 6,
 		Help:     "위아래 방향키로 커서를 옮기고, 스페이스바로 선택합니다. 엔터로 선택을 완료합니다.",
 	}
-	survey.AskOne(prompt, &res)
+	err := survey.AskOne(prompt, &res)
+	if err != nil {
+		if err == terminal.InterruptErr {
+			os.Exit(128)
+		}
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
 
 	return res
 }

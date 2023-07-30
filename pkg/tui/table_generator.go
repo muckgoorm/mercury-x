@@ -16,8 +16,8 @@ func GenerateFlexTable(firstTitle, secondTitle string, firstItems []string) {
 		SetTitle(secondTitle)
 
 	flex := tview.NewFlex().
-		AddItem(firstTab, 0, 1, true).
-		AddItem(secondTab, 0, 2, false)
+		AddItem(firstTab, 0, 4, true).
+		AddItem(secondTab, 0, 5, false)
 
 	t.app.SetInputCapture(t.quit)
 	t.app.SetRoot(flex, true)

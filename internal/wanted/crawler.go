@@ -1,14 +1,10 @@
 package wanted
 
 import (
-	"context"
 	"fmt"
-	"log"
 	"mercury-x/internal"
+	"mercury-x/pkg/webdriver"
 	"strings"
-	"time"
-
-	"github.com/chromedp/chromedp"
 )
 
 type WantedCrawler struct {
@@ -35,37 +31,43 @@ func (c *WantedCrawler) SearchJobPostings(j internal.JobSearchPayload) ([]intern
 	url := ub.String()
 	fmt.Println(url)
 
-	// TODO: implement the crawling logic
-	ctx, cancel := chromedp.NewContext(
-		context.Background(),
-		chromedp.WithLogf(log.Printf),
-	)
-	defer cancel()
+	wd, err := webdriver.NewWebDriver("http://localhost:9515")
+	if err != nil {
+		return nil, err
+	}
+	defer wd.Driver.Quit()
 
-	ctx, cancel = context.WithTimeout(ctx, 60*time.Second)
-	defer cancel()
+	if err := wd.Get(url); err != nil {
+		return nil, err
+	}
 
-	postings, err := getPostings(ctx, url)
+	if err := wd.ScrollToBottom(2); err != nil {
+		return nil, err
+	}
+
+	companies, err := wd.FindByClassName(company)
 	if err != nil {
 		return nil, err
 	}
 
-	return postings, nil
-}
+	roles, err := wd.FindByClassName(position)
+	if err != nil {
+		return nil, err
+	}
 
-func getPostings(ctx context.Context, url string) ([]internal.JobPosting, error) {
+	urls, err := wd.FindLinks(card)
+	if err != nil {
+		return nil, err
+	}
+
 	var postings []internal.JobPosting
-	var companies string
-
-	err := chromedp.Run(ctx,
-		chromedp.Navigate(url),
-		chromedp.Text(`h3`, &companies, chromedp.NodeVisible, chromedp.ByQueryAll),
-	)
-	if err != nil {
-		return nil, err
+	for i := 0; i < len(companies); i++ {
+		postings = append(postings, internal.JobPosting{
+			Company: companies[i],
+			Role:    roles[i],
+			URL:     urls[i],
+		})
 	}
-
-	fmt.Println(companies)
 
 	return postings, nil
 }
