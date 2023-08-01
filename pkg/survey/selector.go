@@ -28,7 +28,7 @@ func SingleChoice(label string, opt []string) string {
 	return res
 }
 
-func MultipleChoice(label string, opt []string) []string {
+func MultipleChoice(label string, opt []string, maxCount int) []string {
 	var res []string
 	prompt := &survey.MultiSelect{
 		Message:  label,
@@ -43,6 +43,11 @@ func MultipleChoice(label string, opt []string) []string {
 		}
 		fmt.Println(err.Error())
 		os.Exit(1)
+	}
+
+	if len(res) > maxCount {
+		fmt.Printf("최대 %d개까지 선택할 수 있습니다.\n", maxCount)
+		return MultipleChoice(label, opt, maxCount)
 	}
 
 	return res

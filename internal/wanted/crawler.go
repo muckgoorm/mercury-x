@@ -5,6 +5,7 @@ import (
 	"mercury-x/internal"
 	"mercury-x/pkg/webdriver"
 	"strings"
+	"time"
 )
 
 type WantedCrawler struct {
@@ -18,7 +19,6 @@ func NewWantedCrawler() internal.Crawler {
 func (c *WantedCrawler) SearchJobPostings(j internal.JobSearchPayload) ([]internal.JobPosting, error) {
 	role := mapRole(j.Role)
 	exp := mapExperience(j.Experience)
-	stacks := mapStacks(j.Stacks)
 
 	ub := strings.Builder{}
 	ub.WriteString("https://www.wanted.co.kr/wdlist/")
@@ -26,7 +26,6 @@ func (c *WantedCrawler) SearchJobPostings(j internal.JobSearchPayload) ([]intern
 	ub.WriteString(role)
 	ub.WriteString("?country=kr&job_sort=job.latest_order&years=")
 	ub.WriteString(exp)
-	ub.WriteString(stacks)
 	ub.WriteString("&locations=all")
 	url := ub.String()
 	fmt.Println(url)
@@ -41,8 +40,28 @@ func (c *WantedCrawler) SearchJobPostings(j internal.JobSearchPayload) ([]intern
 		return nil, err
 	}
 
-	if err := wd.ScrollToBottom(2); err != nil {
+	if err := wd.ClickButton(skillAddButton); err != nil {
 		return nil, err
+	}
+
+	if len(j.Stacks) > 0 {
+		for _, stack := range j.Stacks {
+			if err := wd.FulfillInput(skillInput, stack); err != nil {
+				return nil, err
+			}
+		}
+
+		if err := wd.ClickButtonByDataAttributeId(skillApplyButton); err != nil {
+			return nil, err
+		}
+		time.Sleep(1 * time.Second)
+	}
+
+	scrollCount := (j.Count / 20) - 1
+	if scrollCount > 0 {
+		if err := wd.ScrollToBottom(scrollCount); err != nil {
+			return nil, err
+		}
 	}
 
 	companies, err := wd.FindByClassName(company)

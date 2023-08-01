@@ -11,6 +11,7 @@ type JobSearchPayload struct {
 	Experience string
 	Stacks     []string
 	Benefits   []string
+	Count      int
 }
 
 type JobPosting struct {

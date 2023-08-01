@@ -1,6 +1,7 @@
 package webdriver
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/tebeka/selenium"
@@ -32,6 +33,49 @@ func NewWebDriver(driverUrl string) (*wd, error) {
 
 func (w *wd) Get(url string) error {
 	if err := w.Driver.Get(url); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (w *wd) ClickButton(className string) error {
+	buttonXPath := fmt.Sprintf("//div[@class='%s']//button", className)
+	button, err := w.Driver.FindElement(selenium.ByXPATH, buttonXPath)
+	if err != nil {
+		return err
+	}
+	if err := button.Click(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (w *wd) ClickButtonByDataAttributeId(id string) error {
+	buttonXPath := fmt.Sprintf("//button[@data-attribute-id='%s']", id)
+	button, err := w.Driver.FindElement(selenium.ByXPATH, buttonXPath)
+	if err != nil {
+		return err
+	}
+	if err := button.Click(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (w *wd) FulfillInput(className, value string) error {
+	inputXPath := fmt.Sprintf("//div[@class='%s']//input", className)
+	input, err := w.Driver.FindElement(selenium.ByXPATH, inputXPath)
+	if err != nil {
+		return err
+	}
+	if err := input.SendKeys(value); err != nil {
+		return err
+	}
+	time.Sleep(1 * time.Second)
+	if err := input.SendKeys(selenium.EnterKey); err != nil {
 		return err
 	}
 

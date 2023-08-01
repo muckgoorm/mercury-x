@@ -1,7 +1,5 @@
 package wanted
 
-import "strings"
-
 const (
 	// Roles
 	dev        = "518"
@@ -23,52 +21,13 @@ const (
 	blockchain = "/1027"
 	hw         = "/672"
 
-	// Stacks
-	java     = "1540"
-	kotlin   = "1544"
-	js       = "1541"
-	ts       = "1564"
-	go1      = "1702"
-	go2      = "4335"
-	python   = "1554"
-	spring   = "10169"
-	jpa      = "3451"
-	node1    = "1547"
-	node2    = "2080"
-	nest     = "10288"
-	react1   = "1469"
-	react2   = "9551"
-	next     = "10286"
-	vue1     = "1478"
-	vue2     = "10342"
-	angular1 = "1439"
-	angular2 = "10352"
-	rn       = "10168"
-	flutter  = "10176"
-	swift    = "1563"
-	aws      = "1698"
-	gcp      = "3468"
-	git      = "1411"
-	github   = "1412"
-	linux    = "1459"
-	docker   = "2217"
-	kube     = "10268"
-	sql      = "1562"
-	mysql    = "1464"
-	psql     = "2683"
-	oracle   = "1465"
-	mongo    = "1462"
-	redis    = "1470"
-	c        = "1663"
-	cpp      = "1786"
-	csharp   = "1533"
-	dotnet   = "1445"
-	rust     = "1557"
-
 	// HTML classes
-	card     = "Card_className__u5rsb"
-	company  = "job-card-company-name"
-	position = "job-card-position"
+	skillAddButton   = "FilterInWdlist_skillsFilterContainer__UZGLH"
+	skillInput       = "SkillsSearch_SkillsSearch__At_ER"
+	skillApplyButton = "explore__filter__update"
+	card             = "Card_className__u5rsb"
+	company          = "job-card-company-name"
+	position         = "job-card-position"
 )
 
 func mapRole(role string) string {
@@ -139,89 +98,4 @@ func mapExperience(exp string) string {
 	default:
 		return "-1"
 	}
-}
-
-func mapStacks(stacks []string) string {
-	var qb strings.Builder
-	for _, stack := range stacks {
-		switch stack {
-		case "Java":
-			qb.WriteString("&skill_tags=" + java)
-		case "Kotlin":
-			qb.WriteString("&skill_tags=" + kotlin)
-		case "JavaScript":
-			qb.WriteString("&skill_tags=" + js)
-		case "TypeScript":
-			qb.WriteString("&skill_tags=" + ts)
-		case "Go":
-			qb.WriteString("&skill_tags=" + go1)
-			qb.WriteString("&skill_tags=" + go2)
-		case "Python":
-			qb.WriteString("&skill_tags=" + python)
-		case "Spring Boot":
-			qb.WriteString("&skill_tags=" + spring)
-		case "JPA":
-			qb.WriteString("&skill_tags=" + jpa)
-		case "Node.js":
-			qb.WriteString("&skill_tags=" + node1)
-			qb.WriteString("&skill_tags=" + node2)
-		case "NestJS":
-			qb.WriteString("&skill_tags=" + nest)
-		case "React":
-			qb.WriteString("&skill_tags=" + react1)
-			qb.WriteString("&skill_tags=" + react2)
-		case "Next.js":
-			qb.WriteString("&skill_tags=" + next)
-		case "Vue.js":
-			qb.WriteString("&skill_tags=" + vue1)
-			qb.WriteString("&skill_tags=" + vue2)
-		case "Angular":
-			qb.WriteString("&skill_tags=" + angular1)
-			qb.WriteString("&skill_tags=" + angular2)
-		case "React Native":
-			qb.WriteString("&skill_tags=" + rn)
-		case "Flutter":
-			qb.WriteString("&skill_tags=" + flutter)
-		case "Swift":
-			qb.WriteString("&skill_tags=" + swift)
-		case "AWS":
-			qb.WriteString("&skill_tags=" + aws)
-		case "GCP":
-			qb.WriteString("&skill_tags=" + gcp)
-		case "Git":
-			qb.WriteString("&skill_tags=" + git)
-		case "Github":
-			qb.WriteString("&skill_tags=" + github)
-		case "Linux":
-			qb.WriteString("&skill_tags=" + linux)
-		case "Docker":
-			qb.WriteString("&skill_tags=" + docker)
-		case "Kubernetes":
-			qb.WriteString("&skill_tags=" + kube)
-		case "SQL":
-			qb.WriteString("&skill_tags=" + sql)
-		case "MySQL":
-			qb.WriteString("&skill_tags=" + mysql)
-		case "PostgreSQL":
-			qb.WriteString("&skill_tags=" + psql)
-		case "Oracle":
-			qb.WriteString("&skill_tags=" + oracle)
-		case "MongoDB":
-			qb.WriteString("&skill_tags=" + mongo)
-		case "Redis":
-			qb.WriteString("&skill_tags=" + redis)
-		case "C":
-			qb.WriteString("&skill_tags=" + c)
-		case "C++":
-			qb.WriteString("&skill_tags=" + cpp)
-		case "C#":
-			qb.WriteString("&skill_tags=" + csharp)
-		case ".NET":
-			qb.WriteString("&skill_tags=" + dotnet)
-		case "Rust":
-			qb.WriteString("&skill_tags=" + rust)
-		}
-	}
-
-	return qb.String()
 }
