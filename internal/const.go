@@ -1,11 +1,8 @@
 package internal
 
-// TODO: 상수 관리를 어떻게 할 것인지에 대한 고민 필요
-
 var (
 	Platforms = []string{
 		"wanted",
-		"rallit",
 	}
 
 	Roles = []string{
@@ -80,12 +77,11 @@ var (
 		"Rust",
 	}
 
-	// TODO: 원티드에서 더 다양한 조건으로 검색할 수 있을지 확인 필요 (랠릿이나 점핏에는 더욱 다양한 옵션들이 있음)
 	Benefits = []string{
-		"간식",
-		"수평적 조직",
-		"유연 근무",
 		"재택 근무",
+		"유연 근무",
+		"수평적 조직",
+		"간식",
 	}
 
 	Counts = []string{

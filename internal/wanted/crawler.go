@@ -40,11 +40,11 @@ func (c *WantedCrawler) SearchJobPostings(j internal.JobSearchPayload) ([]intern
 		return nil, err
 	}
 
-	if err := wd.ClickButton(skillAddButton); err != nil {
-		return nil, err
-	}
-
 	if len(j.Stacks) > 0 {
+		if err := wd.ClickButtonByDivClass(skillAddButton); err != nil {
+			return nil, err
+		}
+
 		for _, stack := range j.Stacks {
 			if err := wd.FulfillInput(skillInput, stack); err != nil {
 				return nil, err
@@ -55,6 +55,39 @@ func (c *WantedCrawler) SearchJobPostings(j internal.JobSearchPayload) ([]intern
 			return nil, err
 		}
 		time.Sleep(1 * time.Second)
+	}
+
+	if len(j.Benefits) > 0 {
+		benefitTags := mapBenefitsToTags(j.Benefits)
+		for _, tag := range benefitTags {
+			switch tag {
+			case workFromHomeTag:
+				if err := wd.ClickButtonByDataTag(workFromHomeTag); err != nil {
+					return nil, err
+				}
+			case flexibleTag:
+				if err := wd.ClickButton(nextButton); err != nil {
+					return nil, err
+				}
+				time.Sleep(1 * time.Second)
+				if err := wd.ClickButtonByDataTag(flexibleTag); err != nil {
+					return nil, err
+				}
+			case flatTag:
+				if err := wd.ClickButtonByDataTag(flatTag); err != nil {
+					return nil, err
+				}
+			case snackTag:
+				if err := wd.ClickButton(nextButton); err != nil {
+					return nil, err
+				}
+				time.Sleep(1 * time.Second)
+				if err := wd.ClickButtonByDataTag(snackTag); err != nil {
+					return nil, err
+				}
+			}
+			time.Sleep(1 * time.Second)
+		}
 	}
 
 	scrollCount := (j.Count / 20) - 1

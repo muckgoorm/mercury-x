@@ -25,6 +25,12 @@ const (
 	skillAddButton   = "FilterInWdlist_skillsFilterContainer__UZGLH"
 	skillInput       = "SkillsSearch_SkillsSearch__At_ER"
 	skillApplyButton = "explore__filter__update"
+	workFromHomeTag  = "Work From Home"
+	flexibleTag      = "Flexible Hours"
+	flatTag          = "Company Culture"
+	snackTag         = "Free Meals"
+	militaryTag      = "Military exempt"
+	nextButton       = "NavButton_NavButton__j73pc NavButton_isNext__m3fGk"
 	card             = "Card_className__u5rsb"
 	company          = "job-card-company-name"
 	position         = "job-card-position"
@@ -98,4 +104,21 @@ func mapExperience(exp string) string {
 	default:
 		return "-1"
 	}
+}
+
+func mapBenefitsToTags(benefits []string) []string {
+	var tags []string
+	for _, benefit := range benefits {
+		switch benefit {
+		case "재택 근무":
+			tags = append(tags, workFromHomeTag)
+		case "유연 근무":
+			tags = append(tags, flexibleTag)
+		case "수평적 조직":
+			tags = append(tags, flatTag)
+		case "간식":
+			tags = append(tags, snackTag)
+		}
+	}
+	return tags
 }
