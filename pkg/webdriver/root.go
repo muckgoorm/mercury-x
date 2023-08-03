@@ -39,52 +39,15 @@ func (w *wd) Get(url string) error {
 	return nil
 }
 
-func (w *wd) ClickButton(className string) error {
-	buttonXPath := fmt.Sprintf("//button[@class='%s']", className)
-	button, err := w.Driver.FindElement(selenium.ByXPATH, buttonXPath)
-	if err != nil {
-		return err
-	}
-	if err := button.Click(); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (w *wd) ClickButtonByDivClass(className string) error {
-	buttonXPath := fmt.Sprintf("//div[@class='%s']//button", className)
-	button, err := w.Driver.FindElement(selenium.ByXPATH, buttonXPath)
-	if err != nil {
-		return err
-	}
-	if err := button.Click(); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (w *wd) ClickButtonByDataAttributeId(id string) error {
-	buttonXPath := fmt.Sprintf("//button[@data-attribute-id='%s']", id)
-	button, err := w.Driver.FindElement(selenium.ByXPATH, buttonXPath)
-	if err != nil {
-		return err
-	}
-	if err := button.Click(); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (w *wd) ClickButtonByDataTag(tag string) error {
-	buttonXPath := fmt.Sprintf("//button[@data-tag='%s']", tag)
-	button, err := w.Driver.FindElement(selenium.ByXPATH, buttonXPath)
-	if err != nil {
-		return err
-	}
-	if err := button.Click(); err != nil {
+func (w *wd) WaitForDivClass(className string) error {
+	divXPath := fmt.Sprintf("//div[@class='%s']", className)
+	if err := w.Driver.WaitWithTimeoutAndInterval(selenium.Condition(func(wd selenium.WebDriver) (bool, error) {
+		_, err := wd.FindElement(selenium.ByXPATH, divXPath)
+		if err != nil {
+			return false, nil
+		}
+		return true, nil
+	}), 5*time.Second, 1*time.Second); err != nil {
 		return err
 	}
 
@@ -117,44 +80,4 @@ func (w *wd) ScrollToBottom(count int) error {
 	}
 
 	return nil
-}
-
-func (w *wd) FindByClassName(className string) ([]string, error) {
-	elements, err := w.Driver.FindElements(selenium.ByClassName, className)
-	if err != nil {
-		return nil, err
-	}
-
-	texts := make([]string, 0)
-	for _, element := range elements {
-		text, err := element.Text()
-		if err != nil {
-			return nil, err
-		}
-		texts = append(texts, text)
-	}
-
-	return texts, nil
-}
-
-func (w *wd) FindLinks(className string) ([]string, error) {
-	elements, err := w.Driver.FindElements(selenium.ByClassName, className)
-	if err != nil {
-		return nil, err
-	}
-
-	links := make([]string, 0)
-	for _, element := range elements {
-		aTag, err := element.FindElement(selenium.ByTagName, "a")
-		if err != nil {
-			return nil, err
-		}
-		href, err := aTag.GetAttribute("href")
-		if err != nil {
-			return nil, err
-		}
-		links = append(links, href)
-	}
-
-	return links, nil
 }

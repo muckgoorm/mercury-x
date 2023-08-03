@@ -22,6 +22,7 @@ const (
 	hw         = "/672"
 
 	// HTML classes
+	jobList          = "List_List_container__JnQMS"
 	skillAddButton   = "FilterInWdlist_skillsFilterContainer__UZGLH"
 	skillInput       = "SkillsSearch_SkillsSearch__At_ER"
 	skillApplyButton = "explore__filter__update"

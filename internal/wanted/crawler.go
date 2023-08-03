@@ -54,7 +54,7 @@ func (c *WantedCrawler) SearchJobPostings(j internal.JobSearchPayload) ([]intern
 		if err := wd.ClickButtonByDataAttributeId(skillApplyButton); err != nil {
 			return nil, err
 		}
-		time.Sleep(1 * time.Second)
+		wd.WaitForDivClass(jobList)
 	}
 
 	if len(j.Benefits) > 0 {
