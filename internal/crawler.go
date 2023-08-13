@@ -24,7 +24,7 @@ type JobDescription struct {
 	MainTasks []string
 	Required  []string
 	Preferred []string
-	Benefits  []string
 	Process   []string
 	Location  string
+	Benefits  []string
 }

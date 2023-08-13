@@ -7,4 +7,4 @@ dep:
 
 build-mac:
 	$(MAKE) dep
-	GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build -o merc main.go
+	GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build -o mercury main.go

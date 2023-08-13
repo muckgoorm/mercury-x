@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"mercury-x/internal"
 	"mercury-x/internal/wanted"
 	"mercury-x/pkg/survey"
@@ -34,17 +33,12 @@ func search() {
 		postings, _ = wc.SearchJobPostings(payload)
 	}
 
-	firstTitle := "채용 회사 / 직무"
-	secondTitle := "JD"
-	var items []string
-	for _, p := range postings {
-		items = append(items, fmt.Sprintf("%s / %s", p.Company, p.Role))
-	}
-	tui.GenerateFlexTable(firstTitle, secondTitle, items)
+	tui.SearchTable(postings)
 }
 
 func setBenefitSearchOptions(platform string) (opts []string, maximum int) {
-	if platform == "wanted" {
+	switch platform {
+	case "wanted":
 		opts = internal.Benefits
 		maximum = 3
 	}

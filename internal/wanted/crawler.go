@@ -90,6 +90,8 @@ func (c *WantedCrawler) SearchJobPostings(j internal.JobSearchPayload) ([]intern
 		}
 	}
 
+	time.Sleep(1 * time.Second)
+
 	scrollCount := (j.Count / 20) - 1
 	if scrollCount > 0 {
 		if err := wd.ScrollToBottom(scrollCount); err != nil {
