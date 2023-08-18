@@ -3,7 +3,7 @@ package internal
 type Crawler interface {
 	CheckValidation() bool
 	SearchJobPostings(JobSearchPayload) ([]JobPosting, error)
-	ParseJobDescription(url string) JobDescription
+	ParseJobDescription(url string) (JobDescription, error)
 }
 
 type JobSearchPayload struct {

@@ -1,11 +1,17 @@
 package wanted
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
 	"mercury-x/internal"
 	"mercury-x/pkg/webdriver"
+	"net/http"
 	"strings"
 	"time"
+
+	"golang.org/x/net/html"
 )
 
 type WantedCrawler struct {
@@ -124,4 +130,102 @@ func (c *WantedCrawler) SearchJobPostings(j internal.JobSearchPayload) ([]intern
 	}
 
 	return postings, nil
+}
+
+func (c *WantedCrawler) ParseJobDescription(url string) (internal.JobDescription, error) {
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return internal.JobDescription{}, err
+	}
+
+	req.Header.Set("User-Agent", "Mozilla/5.0")
+	resp, err := client.Do(req)
+	if err != nil {
+		return internal.JobDescription{}, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return internal.JobDescription{}, err
+	}
+
+	html, err := html.Parse(strings.NewReader(string(body)))
+	if err != nil {
+		return internal.JobDescription{}, err
+	}
+
+	script := findNextDataScript(html)
+	var result map[string]interface{}
+	if err := json.Unmarshal([]byte(script), &result); err != nil {
+		return internal.JobDescription{}, err
+	}
+
+	props, ok := result["props"].(map[string]interface{})
+	if !ok {
+		return internal.JobDescription{}, errors.New("props object not found")
+	}
+	pageProps, ok := props["pageProps"].(map[string]interface{})
+	if !ok {
+		return internal.JobDescription{}, errors.New("pageProps object not found")
+	}
+	head, ok := pageProps["head"].(map[string]interface{})
+	if !ok {
+		return internal.JobDescription{}, errors.New("head object not found")
+	}
+	jdId := strings.Split(url, "/")[4]
+	id, ok := head[jdId].(map[string]interface{})
+	if !ok {
+		return internal.JobDescription{}, fmt.Errorf("id object not found: %s", jdId)
+	}
+	jdContents, ok := id["jd"].(string)
+	if !ok {
+		return internal.JobDescription{}, errors.New("jd object not found")
+	}
+
+	var step uint8
+	var jd internal.JobDescription
+	lines := strings.Split(jdContents, "\n")
+	for _, line := range lines {
+		switch line {
+		case "주요업무", "자격요건", "우대사항", "혜택 및 복지":
+			step++
+		case "":
+			continue
+		default:
+			switch step {
+			case 1:
+				jd.MainTasks = append(jd.MainTasks, line)
+			case 2:
+				jd.Required = append(jd.Required, line)
+			case 3:
+				jd.Preferred = append(jd.Preferred, line)
+			case 4:
+				jd.Benefits = append(jd.Benefits, line)
+			}
+		}
+	}
+
+	return jd, nil
+}
+
+func findNextDataScript(node *html.Node) string {
+	if node.Type == html.ElementNode && node.Data == "script" {
+		for _, attr := range node.Attr {
+			if attr.Key == "id" && attr.Val == "__NEXT_DATA__" {
+				if node.FirstChild != nil {
+					return node.FirstChild.Data
+				}
+			}
+		}
+	}
+
+	for c := node.FirstChild; c != nil; c = c.NextSibling {
+		if data := findNextDataScript(c); data != "" {
+			return data
+		}
+	}
+
+	return ""
 }
