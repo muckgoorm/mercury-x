@@ -123,9 +123,10 @@ func (c *WantedCrawler) SearchJobPostings(j internal.JobSearchPayload) ([]intern
 	var postings []internal.JobPosting
 	for i := 0; i < len(companies); i++ {
 		postings = append(postings, internal.JobPosting{
-			Company: companies[i],
-			Role:    roles[i],
-			URL:     urls[i],
+			Platform: "wanted",
+			Company:  companies[i],
+			Role:     roles[i],
+			URL:      urls[i],
 		})
 	}
 

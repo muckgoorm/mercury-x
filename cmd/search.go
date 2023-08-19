@@ -9,28 +9,25 @@ import (
 )
 
 func search() {
+	var payload internal.JobSearchPayload
 	platform := survey.SingleChoice("검색할 플랫폼을 골라주세요", internal.Platforms)
 	benefitOpts, benefitMaximum := setBenefitSearchOptions(platform)
-	role := survey.SingleChoice("직군을 골라주세요", internal.Roles)
-	experience := survey.SingleChoice("경력을 골라주세요", internal.Experiences)
-	stacks := survey.MultipleChoice("기술 스택을 골라주세요", internal.Stacks, 5)
-	benefits := survey.MultipleChoice("복지 여건을 선택해주세요", benefitOpts, benefitMaximum)
-	count, _ := strconv.Atoi(survey.SingleChoice("보고 싶은 채용 공고의 개수를 입력해주세요", internal.Counts))
-
-	payload := internal.JobSearchPayload{
-		Role:       role,
-		Experience: experience,
-		Stacks:     stacks,
-		Benefits:   benefits,
-		Count:      count,
-	}
+	payload.Role = survey.SingleChoice("직군을 골라주세요", internal.Roles)
+	payload.Experience = survey.SingleChoice("경력을 골라주세요", internal.Experiences)
+	payload.Stacks = survey.MultipleChoice("기술 스택을 골라주세요", internal.Stacks, 5)
+	payload.Benefits = survey.MultipleChoice("복지 여건을 선택해주세요", benefitOpts, benefitMaximum)
+	payload.Count, _ = strconv.Atoi(survey.SingleChoice("보고 싶은 채용 공고의 개수를 입력해주세요", internal.Counts))
 
 	var postings []internal.JobPosting
 
 	switch platform {
 	case "wanted":
 		wc := wanted.NewWantedCrawler()
-		postings, _ = wc.SearchJobPostings(payload)
+		jp, err := wc.SearchJobPostings(payload)
+		if err != nil {
+			panic(err)
+		}
+		postings = jp
 	}
 
 	tui.SearchTable(postings)

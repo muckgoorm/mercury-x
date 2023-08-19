@@ -15,9 +15,10 @@ type JobSearchPayload struct {
 }
 
 type JobPosting struct {
-	Company string
-	Role    string
-	URL     string
+	Platform string
+	Company  string
+	Role     string
+	URL      string
 }
 
 type JobDescription struct {
