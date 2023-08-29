@@ -20,17 +20,13 @@ func search() {
 
 	var postings []internal.JobPosting
 
-	switch platform {
-	case "wanted":
-		wc := wanted.NewWantedCrawler()
-		jp, err := wc.SearchJobPostings(payload)
-		if err != nil {
-			panic(err)
-		}
-		postings = jp
+	wc := wanted.NewWantedCrawler()
+	postings, err := wc.SearchJobPostings(payload)
+	if err != nil {
+		panic(err)
 	}
 
-	tui.SearchTable(postings)
+	tui.JobList(postings)
 }
 
 func setBenefitSearchOptions(platform string) (opts []string, maximum int) {
