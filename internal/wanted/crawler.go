@@ -46,6 +46,8 @@ func (c *WantedCrawler) SearchJobPostings(j internal.JobSearchPayload) ([]intern
 		return nil, err
 	}
 
+	time.Sleep(1 * time.Second)
+
 	if len(j.Stacks) > 0 {
 		if err := wd.ClickButtonByDivClass(skillAddButton); err != nil {
 			return nil, err
@@ -98,11 +100,8 @@ func (c *WantedCrawler) SearchJobPostings(j internal.JobSearchPayload) ([]intern
 
 	time.Sleep(1 * time.Second)
 
-	scrollCount := (j.Count / 20) - 1
-	if scrollCount > 0 {
-		if err := wd.ScrollToBottom(scrollCount); err != nil {
-			return nil, err
-		}
+	if err := wd.ScrollToBottom(); err != nil {
+		return nil, err
 	}
 
 	companies, err := wd.FindByClassName(company)

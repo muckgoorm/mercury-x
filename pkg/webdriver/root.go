@@ -71,8 +71,17 @@ func (w *wd) FulfillInput(className, value string) error {
 	return nil
 }
 
-func (w *wd) ScrollToBottom(count int) error {
-	for i := 0; i < count; i++ {
+func (w *wd) ScrollToBottom() error {
+	previousHeight := 0.0
+	for {
+		currentHeight, err := w.Driver.ExecuteScript("return document.body.scrollHeight", nil)
+		if err != nil {
+			return err
+		}
+		if previousHeight == currentHeight {
+			break
+		}
+		previousHeight = currentHeight.(float64)
 		if _, err := w.Driver.ExecuteScript("window.scrollTo(0, document.body.scrollHeight)", nil); err != nil {
 			return err
 		}

@@ -8,6 +8,7 @@ import (
 const s = "search"
 
 const (
+	FAILED            = 1
 	INVALID_INPUT     = 2
 	COMMAND_NOT_FOUND = 127
 )
@@ -21,7 +22,10 @@ func Root(args []string) {
 
 	switch args[1] {
 	case s:
-		search()
+		err := search()
+		if err != nil {
+			os.Exit(FAILED)
+		}
 	default:
 		os.Exit(COMMAND_NOT_FOUND)
 	}

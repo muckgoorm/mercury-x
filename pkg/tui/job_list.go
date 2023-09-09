@@ -58,7 +58,6 @@ func JobList(postings []internal.JobPosting) error {
 	m.list.Title = "채용 공고"
 
 	p := tea.NewProgram(m, tea.WithAltScreen())
-
 	if _, err := p.Run(); err != nil {
 		return err
 	}
