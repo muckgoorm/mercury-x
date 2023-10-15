@@ -21,10 +21,11 @@ type JobPosting struct {
 }
 
 type JobDescription struct {
-	MainTasks []string
-	Required  []string
-	Preferred []string
-	Process   []string
-	Location  string
-	Benefits  []string
+	MainTasks   []string
+	Required    []string
+	Preferred   []string
+	Description string
+	Process     []string
+	Location    string
+	Benefits    []string
 }

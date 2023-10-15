@@ -5,12 +5,9 @@ import (
 
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
 )
 
-var postingStyle = lipgloss.NewStyle().Margin(1, 2)
-
-type posting struct {
+type jobList struct {
 	list list.Model
 }
 
@@ -23,29 +20,29 @@ func (j job) Title() string       { return j.company }
 func (j job) Description() string { return j.role }
 func (j job) FilterValue() string { return j.company }
 
-func (p posting) Init() tea.Cmd {
+func (jl jobList) Init() tea.Cmd {
 	return nil
 }
 
-func (p posting) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (jl jobList) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "q", "esc", "ctrl+c":
-			return p, tea.Quit
+			return jl, tea.Quit
 		}
 	case tea.WindowSizeMsg:
-		h, v := postingStyle.GetFrameSize()
-		p.list.SetSize(msg.Width-h, msg.Height-v)
+		h, v := listStyle.GetFrameSize()
+		jl.list.SetSize(msg.Width-h, msg.Height-v)
 	}
 
 	var cmd tea.Cmd
-	p.list, cmd = p.list.Update(msg)
-	return p, cmd
+	jl.list, cmd = jl.list.Update(msg)
+	return jl, cmd
 }
 
-func (p posting) View() string {
-	return postingStyle.Render(p.list.View())
+func (jl jobList) View() string {
+	return listStyle.Render(jl.list.View())
 }
 
 func JobList(postings []internal.JobPosting) error {
@@ -54,7 +51,7 @@ func JobList(postings []internal.JobPosting) error {
 		items = append(items, job{company: posting.Company, role: posting.Role})
 	}
 
-	m := posting{list: list.New(items, list.NewDefaultDelegate(), 0, 0)}
+	m := jobList{list: list.New(items, list.NewDefaultDelegate(), 0, 0)}
 	m.list.Title = "채용 공고"
 
 	p := tea.NewProgram(m, tea.WithAltScreen())
